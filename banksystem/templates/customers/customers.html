@@ -1,0 +1,29 @@
+{% extends 'customers/base.html' %} 
+{% block title %}Home{% endblock %}
+{% block main %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Account No</th>
+      <th scope="col">Customer Email</th>
+      <th scope="col">Customer Name</th>
+      <th scope="col">IFSC Code</th>
+      <th>Account details</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for customer in customers %}
+    <tr>
+      <td scope="row">{{ customer.acc_number }}</td>
+      <td>{{ customer.email }}</td>
+      <td>{{ customer.cust_name }}</td>
+      <td>{{ customer.ifsc_code}}</td>
+      <td>
+        <a href="{% url 'account_details' customer.id%}">Details</a>
+        <a href="{% url 'transfer' customer.id%}">Transfer</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
