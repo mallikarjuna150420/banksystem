@@ -1,0 +1,99 @@
+{% extends 'customers/base.html' %} {% block title %}Account - {{ acc.cust_name
+}}{% endblock %} {% load humanize %} {% block back %}
+<div class="display-4" style="text-align: left" title="goto Home">
+  <a href="{% url 'customer' %}" style="text-decoration: none; color: black"
+    ><span class="sym-back">«</span></a
+  >
+</div>
+{% endblock %} {% block main %}
+<h2 class="color">Account Details</h2>
+<div class="row mt-5 align-items-center">
+  <div class="col">
+    <div class="color p-2 bd-highlight">
+      Account No&nbsp;:&nbsp;<span class="display-6">{{acc.acc_number}}</span>
+    </div>
+  </div>
+  <div class="col">
+    <div class="color p-2 me-auto bd-highlight">
+      Customer mail&nbsp;:&nbsp;<span class="display-6">{{acc.email}}</span>
+    </div>
+  </div>
+</div>
+<div class="row align-items-center">
+  <div class="col">
+    <div class="color p-2 bd-highlight">
+      Account Holder&nbsp;:&nbsp;<span class="display-6"
+        >{{ acc.cust_name }}</span
+      >
+    </div>
+  </div>
+  <div class="col">
+    <div class="color p-2 me-auto bd-highlight">
+      IFSC code&nbsp;:&nbsp;<span class="display-6">{{acc.ifsc_code}}</span>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row justify-content-start">
+    <div class="col-md-9 ms-auto mt-4">
+      <div class="color p-2">
+        Balance&nbsp;:&nbsp;<span class="display-6"
+          >&#8377;&nbsp;{{acc.total_amt|floatformat:2|intcomma}}</span
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<br /><br />
+<!-- Transactions made by the current customer account -->
+<div>
+  <span style="background-color: green">&nbsp;</span>&nbsp;<span class="color"
+    >Recevied amount</span
+  ><br />
+  <span style="background-color: red">&nbsp;</span>&nbsp;<span class="color"
+    >Send amount</span
+  ><br />
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Account No</th>
+      <th scope="col">Transaction Id</th>
+      <th scope="col">Customer Name</th>
+      <th scope="col">Date</th>
+      <th scope="col">Time</th>
+      <th scope="col">Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for transaction in transactions %}
+    <tr>
+      <!-- sender or recevier account numbers  -->
+      <td scope="col">
+        {% if acc.acc_number != transaction.send_account.acc_number %}
+        <span style="background-color: green; color: white; padding: 4px"
+          >{{transaction.send_account.acc_number}}</span
+        >
+        {% elif acc.acc_number != transaction.recv_account.acc_number %}
+        <span style="background-color: red; color: white; padding: 4px"
+          >{{transaction.recv_account.acc_number}}</span
+        >
+        {% endif%}
+      </td>
+      <td>{{transaction.transaction_id}}</td>
+      <td>
+        {% if acc.acc_number != transaction.send_account.acc_number %}
+        <span>{{transaction.send_account.cust_name}}</span>
+        {% elif acc.acc_number != transaction.recv_account.acc_number %}
+        <span>{{transaction.recv_account.cust_name}}</span>
+        {% endif%}
+      </td>
+      <td>{{ transaction.trans_date_time | date:"D, d M, Y" }}</td>
+      <td>{{ transaction.trans_date_time | time:"H:i"}}</td>
+      <td>&#8377;&nbsp;{{transaction.trans_amt|intcomma|floatformat:2}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

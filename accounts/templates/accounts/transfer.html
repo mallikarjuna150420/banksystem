@@ -1,0 +1,35 @@
+{% extends 'customers/base.html' %}
+{% block title %}{{acc.cust_name}}{% endblock %}
+{% block back %}
+<div class="display-4" style="text-align: left" title="goto Home">
+    <a href="{% url 'customer' %}" style="text-decoration: none;color:black;"><span class="sym-back">«</span></a>
+</div>
+{% endblock %}
+{% block main %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Account No</th>
+            <th scope="col">Customer Id</th>
+            <th scope="col">Customer Name</th>
+            <th>Account details</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for account in account %}
+        {% if account.acc_number != acc.acc_number %}
+        <tr>
+            <td scope="row">{{ account.acc_number }}</td>
+            <td>{{ account.email }}</td>
+            <td>{{ account.cust_name }}</td>
+            <td>
+                <a href="{% url 'send' acc.id account.id%}">Send</a>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

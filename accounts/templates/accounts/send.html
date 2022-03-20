@@ -1,0 +1,24 @@
+{% extends 'customers/base.html'%}
+{% block title %}Payment{% endblock %}
+{% block main %}
+{% if messages %}
+<ul class="alert alert-warning" role="alert">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %} style="list-style-type:none;">{{ message }}</li>
+        {% endfor %}
+</ul>
+{% endif %}
+<div class="container form-amount">
+    <form class="row row-cols-lg-auto g-3 justify-content-center" method="post">
+        {% csrf_token %}
+        <div class="col-12 align-self-center">
+            <label for="amount" class="color col-md-2 col-form-label col-form-label-md">Amount</label>
+            <input type="number" class=" col-md-3 border-primary rounded" name='amount' placeholder="100" step="any">
+        </div>
+        <div class="col-12 align-self-center mt-5">
+            <input type="submit" class="btn btn-outline-primary me-3" name="send" value="send">
+            <a class="btn btn-outline-danger" href="{% url 'transfer' send.id %}">cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
